@@ -1,0 +1,99 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="TemplateBusca.master.cs" Inherits="Site.Layout.TemplateBusca" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Content/css/bootstrap-datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="../Content/js/jquery-2.1.4.js" type="text/javascript"></script>
+    <script src="../Content/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="../Content/js/bootstrap.js" type="text/javascript"></script>    
+    <script src="../Content/js/bootstrap-datepicker.pt-BR.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+          color: #FFF;
+          background-color: rgba(0, 66, 116, 1);
+        }
+        .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+          color: #FFF;
+          background-color: rgba(0, 66, 116, 1);
+        }
+        .sair:hover
+        {
+          color: #777 !important;
+          background-color: #F8F8F8 !important;  
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+
+            $(".sair").on('click', function () { return confirm('Deseja mesmo sair?') });
+
+        });
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body style="background-image:url('Content/img/calendar2.jpg')">
+    <form id="form1" runat="server">
+        <nav class="nav navbar-default">
+          <div class="container-fluid">            
+            <div class="navbar-header">              
+              <a class="navbar-brand" href="../ListarTarefas.aspx"><span class="glyphicon glyphicon-home"></span> HOME</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li><a href="../ListarContatos.aspx">Contatos</a></li>
+                <li><a href="../ListarTarefas.aspx">Tarefas</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Busca Avançada<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="../BuscaAvancadaContato.aspx">Contato</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../BuscaAvancadaTarefa.aspx">Tarefa</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <div class="col-lg-3" style="margin-top:8px">
+                <div class="input-group">
+                  <asp:textbox runat="server" class="form-control" placeholder="Busca Rápida..." ID="txtBuscaRapida"></asp:textbox>
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="glyphicon glyphicon-search"></span> Buscar <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                       <li>
+                        <asp:LinkButton OnClick="BuscarContato" runat="server" ID="LinkButton2">Contato</asp:LinkButton>
+                      </li>
+                      <li class="divider"></li>
+                      <li>
+                        <asp:LinkButton OnClick="Buscar" runat="server" ID="btlTarefa">Tarefa</asp:LinkButton>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <ul class="nav navbar-nav navbar-right">
+                  <li>
+                    <asp:LinkButton OnClick="Logout" runat="server" ID="LinkButton1" CssClass="sair">Sair  <span class="glyphicon glyphicon-user"></span></asp:LinkButton>
+                  </li> 
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="col-xs-12 well text-center" style="height: 125px; color: white; text-transform: uppercase; font-family: segoe-ui; background-color: rgba(0,0,0,0);">
+            <h3 class="titulo">Agenda Virtual</h3>
+        </div>
+        <div class="col-xs-8 well col-xs-offset-2" style="min-height:350px">
+            
+            <div class="col-xs-12">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">        
+                </asp:ContentPlaceHolder>
+            </div>
+        </div>
+        <div class="col-xs-12">
+                <div class="panel-footer text-center" style="height: 30px; color: white;text-shadow: 1px 1px 1px rgb(12, 69, 103);">© 2015 Agenda Virtual - Todos os direitos reservados</div>
+        </div>
+    </form>
+</body>
+</html>

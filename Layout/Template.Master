@@ -1,0 +1,192 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Template.master.cs" Inherits="Site.Layout.Template" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server">
+    <title></title>
+    <link href="../Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Content/css/bootstrap-datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="../Content/js/jquery-2.1.4.js" type="text/javascript"></script>
+    <script src="../Content/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script src="../Content/js/bootstrap.js" type="text/javascript"></script>    
+    <script src="../Content/js/bootstrap-datepicker.pt-BR.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+          color: #FFF;
+          background-color: rgba(0, 66, 116, 1);
+        }
+        .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+          color: #FFF;
+          background-color: rgba(0, 66, 116, 1);
+        }
+        .sair:hover
+        {
+          color: #777 !important;
+          background-color: #F8F8F8 !important;  
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+
+            $(".sair").on('click', function () { return confirm('Deseja mesmo sair?') });
+
+        });
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body style="background-image:url('Content/img/calendar2.jpg')">
+    <form id="form1" runat="server">
+    <nav class="nav navbar-default">
+          <div class="container-fluid">            
+            <div class="navbar-header">              
+              <a class="navbar-brand" href="../ListarTarefas.aspx"><span class="glyphicon glyphicon-home"></span> HOME</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li><a href="../ListarContatos.aspx">Contatos</a></li>
+                <li><a href="../ListarTarefas.aspx">Tarefas</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Busca Avançada<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="../BuscaAvancadaContato.aspx">Contato</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../BuscaAvancadaTarefa.aspx">Tarefa</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <div class="col-lg-3" style="margin-top:8px">
+                <div class="input-group">
+                  <%--<input type="text" class="form-control" placeholder="Busca Rápida...">--%>
+                  <asp:textbox runat="server" class="form-control" placeholder="Busca Rápida..." ID="txtBuscaRapida"></asp:textbox>
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="glyphicon glyphicon-search"></span> Buscar <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                      <li>
+                        <asp:LinkButton OnClick="BuscarContato" runat="server" ID="LinkButton2">Contato</asp:LinkButton>
+                      </li>
+                      <li class="divider"></li>
+                      <li>
+                        <asp:LinkButton OnClick="BuscarTarefa" runat="server" ID="btlTarefa">Tarefa</asp:LinkButton>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <asp:LinkButton OnClick="Logout" runat="server" ID="LinkButton1" CssClass="sair">Sair  <span class="glyphicon glyphicon-user"></span></asp:LinkButton>
+                </li>                
+              </ul>
+            </div>
+          </div>
+        </nav>        
+    <div class="container-fluid" style="margin-top:5px">
+        <div class="col-xs-10 col-xs-offset-1" style="min-width: 1083px;">
+            <div class="col-xs-12 well text-center" style="height: 125px; color: white; text-transform: uppercase; font-family: segoe-ui; background-color: rgba(0,0,0,0);">
+               <h3 class="titulo">Agenda Virtual</h3>
+            </div>
+            <div class="centered col-xs-11">
+
+                <div id="MEsquerda" runat="server" class="col-xs-3 well col-xs-offset-1" style="padding-bottom: 3px; z-index: 0; min-height: 400px;
+                    border-top-right-radius: 0px; border-bottom-right-radius: 0px; box-shadow: -2px 1px 10px 0px #0f0f0f;min-width: 237px">
+                   <div id="datepicker" style="margin-left: -1px;" runat="server"></div>               
+                    <asp:HiddenField id="dtSel" runat="server"/>
+                    <script type="text/javascript">
+                        $('#datepicker').datepicker({
+                            format: "dd/mm/yyyy",
+                            language: "pt-BR",
+                            todayHighlight: true,
+//                            beforeShowDay: function (date1) {                                
+//                                if (date1.getMonth() == (new Date()).getMonth())
+//                                switch (date1.getDate()) {
+//                                    case 24:
+//                                        return {
+//                                            tooltip: 'Compromisso',
+//                                            classes: 'active'
+//                                        };                                        
+//                                    case 8:
+//                                        return false;
+//                                    case 12:
+//                                        return "green";                                    
+//                                }
+//                            },
+                            toggleActive: true
+                        });
+                        $("#datepicker").on("changeDate", function (event) {
+                            $("#dtSel").val(
+                                $("#datepicker").datepicker('getFormattedDate')
+
+                             )
+
+                        });                      
+                     
+                   </script>
+               
+                   <div >                      
+                   <div class="col-xs-offset-9">
+                       <asp:Button runat="server" Text="Ok" OnClick="ListarBtn" CssClass="btn btn-primary btn-sm" rel="tooltip" title="Selecione uma data e clique em Ok"/>
+                   </div>          
+                   <br />               
+                    </div>            
+             
+                 </div>
+                <div id="MCentro" runat="server" class="col-xs-2 well hidden" style="padding: 0px; border-radius: 0px 4px 0px 0px; z-index: 1; 
+                    min-height: 400px; min-width: 158px; box-shadow: 7px 4px 10px 0px rgba(15, 15, 15, 0.55);">                
+                    <div class="panel panel-default">
+                      <div class="panel-heading" style="font-weight:bold" id="ListaDia" runat="server">Lista de Tarefas</div>                     
+                      
+                          <%--<ul class="list-group">
+                            <li class="list-group-item">Aniversário Ana</li>
+                            <li class="list-group-item">Reunião c/ Cliente</li>
+                            <li class="list-group-item">Casamento Carlos</li>
+                            <li class="list-group-item">Consulta Dentista</li>
+                            <li class="list-group-item">Cinema</li>
+                          </ul>--%>
+                          <asp:GridView runat="server" ID="gridTarefasDia" Width="100%" AutoGenerateColumns="false" CssClass="table table-hover table-striped" GridLines="None" ShowHeader="False">
+                            <Columns>
+                                <%--<asp:BoundField DataField="Titulo" />--%>
+                                <asp:TemplateField>
+                                   <ItemTemplate>
+                                            <asp:HyperLink ID="HyperLink1" runat="server" 
+                                                NavigateUrl='<%# Eval("IdTarefa", @"/DetalhesTarefa.aspx?id={0}") %>' 
+                                                Text='<%# Eval("Titulo")%>' Visible="true">
+                                            </asp:HyperLink>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                            </Columns>                        
+                          </asp:GridView>
+                    </div>
+                </div>
+                <div class="col-xs-7" style="padding-left:0px;min-width:240px">
+                    <div class="col-xs-5" style="padding-left: 13px">
+                        <ul class="nav nav-tabs">
+                          <li role="presentation" class="active"><a href="../CadastrarTarefa.aspx">Tarefas</a></li>
+                          <li role="presentation"><a href="../CadastrarContato.aspx">Contatos</a></li>                      
+                        </ul>
+                    </div>
+                    
+                    <div class="col-xs-12 well" style="z-index: 2; min-height: 358px; max-height: 357px;
+                         border-top-left-radius: 0px; border-bottom-left-radius: 0px; box-shadow: 7px 4px 5px 0px rgba(15, 15, 15, 0.52);">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" >
+        
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+            </div>
+                <div class="col-xs-12 panel-footer text-center" style="height: 30px; color: white;text-shadow: 1px 1px 1px rgb(12, 69, 103);">© 2015 Agenda Virtual - Todos os direitos reservados</div>
+               
+            </div>
+    </div>
+    </form>
+
+   <%-- <div class="container-fluid" style="margin-top:5px">
+        <div class="col-xs-10 col-xs-offset-1 fback">
+            <div class="col-xs-12 panel-footer text-center" style="height: 30px; color: white;">© 2015 Agenda Virtual - Todos os direitos reservados</div>
+        </div>
+    </div>--%>
+
+    
+</body>
+</html>
